@@ -34,6 +34,6 @@ Este proyecto consiste en una tienda online desarrollada con una arquitectura de
 Este proyecto está licenciado bajo la [Licencia MIT](https://opensource.org/licenses/MIT). Puedes ver el archivo LICENSE para más detalles.
 
 ## Contacto
-Para cualquier pregunta o comentario, no dudes en ponerte en contacto con nosotros en [correo electrónico] o [redes sociales].
+Para cualquier pregunta o comentario, no dudes en ponerte en contacto con nosotros en bastianlandskronfreelancer@gmail.com o https://www.linkedin.com/in/blandskron/.
 
 ---
