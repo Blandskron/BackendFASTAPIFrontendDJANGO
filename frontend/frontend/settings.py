@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+API_URL = 'http://127.0.0.1:8000/products'
 
 # Application definition
 

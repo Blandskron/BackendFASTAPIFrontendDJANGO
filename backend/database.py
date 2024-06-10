@@ -15,6 +15,8 @@ class Product(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     price = Column(Float)
+    description = Column(String, nullable=True)
+
 
 def init_db():
     Base.metadata.create_all(bind=engine)
