@@ -2,8 +2,9 @@ import requests
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from .forms import ProductForm
+from django.conf import settings
 
-API_URL = 'http://127.0.0.1:8000/products'
+API_URL = settings.API_URL
 
 def lista_productos(request):
     response = requests.get(API_URL)
