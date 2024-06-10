@@ -1,48 +1,61 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException, Depends
+from sqlalchemy.orm import Session
 from typing import List
 
-app = FastAPI()
+import backend.models as models
+import backend.schemas as schemas
+import backend.database as database
 
-class Product(BaseModel):
-    id: int
-    name: str
-    price: float
+app = FastAPI(title="Blandskron", version="1.0")
 
-products = [
-    Product(id=1, name="Laptop", price=999.99),
-    Product(id=2, name="Mouse", price=19.99),
-    Product(id=3, name="Keyboard", price=49.99)
-]
+models.init_db()
 
-@app.get("/products", response_model=List[Product])
-async def get_products():
+# Dependency
+def get_db():
+    db = database.SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+@app.get("/products", response_model=List[schemas.Product], tags=["products"])
+async def get_products(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    products = db.query(models.Product).offset(skip).limit(limit).all()
     return products
 
-@app.get("/products/{product_id}", response_model=Product)
-async def get_product(product_id: int):
-    for product in products:
-        if product.id == product_id:
-            return product
-    raise HTTPException(status_code=404, detail="Product not found")
-
-@app.post("/products", response_model=Product)
-async def create_product(product: Product):
-    products.append(product)
+@app.get("/products/{product_id}", response_model=schemas.Product, tags=["products"])
+async def get_product(product_id: int, db: Session = Depends(get_db)):
+    product = db.query(models.Product).filter(models.Product.id == product_id).first()
+    if product is None:
+        raise HTTPException(status_code=404, detail="Product not found")
     return product
 
-@app.put("/products/{product_id}", response_model=Product)
-async def update_product(product_id: int, updated_product: Product):
-    for idx, product in enumerate(products):
-        if product.id == product_id:
-            products[idx] = updated_product
-            return updated_product
-    raise HTTPException(status_code=404, detail="Product not found")
+@app.post("/products/create/", response_model=schemas.Product, tags=["products"])
+async def create_product(product: schemas.ProductCreate, db: Session = Depends(get_db)):
+    db_product = models.Product(name=product.name, price=product.price, description=product.description)
+    db.add(db_product)
+    db.commit()
+    db.refresh(db_product)
+    return db_product
 
-@app.delete("/products/{product_id}", response_model=Product)
-async def delete_product(product_id: int):
-    for idx, product in enumerate(products):
-        if product.id == product_id:
-            deleted_product = products.pop(idx)
-            return deleted_product
-    raise HTTPException(status_code=404, detail="Product not found")
+@app.put("/products/{product_id}", response_model=schemas.Product, tags=["products"])
+async def update_product(product_id: int, updated_product: schemas.ProductUpdate, db: Session = Depends(get_db)):
+    product = db.query(models.Product).filter(models.Product.id == product_id).first()
+    if product is None:
+        raise HTTPException(status_code=404, detail="Product not found")
+    product.name = updated_product.name
+    product.price = updated_product.price
+    product.description = updated_product.description
+    product.last_updated = updated_product.last_updated
+    db.commit()
+    db.refresh(product)
+    return product
+
+@app.delete("/products/{product_id}", response_model=schemas.Product, tags=["products"])
+async def delete_product(product_id: int, db: Session = Depends(get_db)):
+    product = db.query(models.Product).filter(models.Product.id == product_id).first()
+    if product is None:
+        raise HTTPException(status_code=404, detail="Product not found")
+    db.delete(product)
+    db.commit()
+    return product
