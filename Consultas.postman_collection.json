@@ -1,0 +1,56 @@
+{
+	"info": {
+		"_postman_id": "33f951b8-9bbb-4a34-ade3-b9669b76bc36",
+		"name": "Consultas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36219767"
+	},
+	"item": [
+		{
+			"name": "products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/products/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "products_ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/products/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
