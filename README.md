@@ -15,6 +15,10 @@ Este proyecto consiste en una tienda online desarrollada con una arquitectura de
   - Diseño interactivo y amigable para el usuario.
   - Integración con el backend mediante peticiones HTTP para mostrar y actualizar la información de los productos.
 
+## Visualizaciones
+### Backend (FastAPI)
+![Visualización del Backend](images/backend_visual.png)
+
 ## Requerimientos del Sistema
 - Python 3.x
 - Django
