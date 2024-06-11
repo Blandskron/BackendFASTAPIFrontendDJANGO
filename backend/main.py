@@ -2,17 +2,17 @@ from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.orm import Session
 from typing import List
 
-import backend.models as models
-import backend.schemas as schemas
-import backend.database as database
+import models
+import schemas
 
 app = FastAPI(title="Blandskron", version="1.0")
 
+# Inicializar la base de datos
 models.init_db()
 
 # Dependency
 def get_db():
-    db = database.SessionLocal()
+    db = models.SessionLocal()
     try:
         yield db
     finally:
