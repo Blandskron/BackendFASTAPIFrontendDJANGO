@@ -1,13 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Detalle del Producto</title>
-</head>
-<body>
-    <h1>{{ producto.name }}</h1>
-    <p>Precio: ${{ producto.price }}</p>
-    <a href="{% url 'actualizar_producto' producto.id %}">Editar</a>
-    <a href="{% url 'eliminar_producto' producto.id %}">Eliminar</a>
-    <a href="{% url 'lista_productos' %}">Volver a la Lista</a>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Detalle del Producto{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="text-center">{{ producto.name }}</h1>
+                    <p class="text-center">Precio: ${{ producto.price }}</p>
+                    <div class="text-center">
+                        <a class="btn btn-primary" href="{% url 'actualizar_producto' producto.id %}">Editar</a>
+                        <a class="btn btn-danger" href="{% url 'eliminar_producto' producto.id %}">Eliminar</a>
+                        <a class="btn btn-secondary" href="{% url 'lista_productos' %}">Volver a la Lista</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

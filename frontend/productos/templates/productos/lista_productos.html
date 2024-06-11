@@ -1,19 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Lista de Productos</title>
-</head>
-<body>
-    <h1>Lista de Productos</h1>
-    <a href="{% url 'crear_producto' %}">Crear Producto</a>
-    <ul>
-    {% for producto in productos %}
-        <li>
-            <a href="{% url 'detalle_producto' producto.id %}">{{ producto.name }}</a> - ${{ producto.price }} - {{ producto.description }}
-            <a href="{% url 'actualizar_producto' producto.id %}">Editar</a>
-            <a href="{% url 'eliminar_producto' producto.id %}">Eliminar</a>
-        </li>
-    {% endfor %}
-    </ul>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Lista de Productos{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 class="text-center">Lista de Productos</h1>
+            <a class="btn btn-primary mb-3" href="{% url 'crear_producto' %}">Crear Producto</a>
+            <ul class="list-group">
+            {% for producto in productos %}
+                <li class="list-group-item" style="background-color: rgb(210, 210, 146);">
+                    <h5>{{ producto.name }}</h5>
+                    <p>Precio: ${{ producto.price }}</p>
+                    <p>{{ producto.description }}</p>
+                    <div class="text-center">
+                        <a class="btn btn-primary btn-sm" href="{% url 'detalle_producto' producto.id %}">Ver Detalle</a>
+                        <a class="btn btn-secondary btn-sm" href="{% url 'actualizar_producto' producto.id %}">Editar</a>
+                        <a class="btn btn-danger btn-sm" href="{% url 'eliminar_producto' producto.id %}">Eliminar</a>
+                    </div>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
