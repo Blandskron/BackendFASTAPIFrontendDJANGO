@@ -1,5 +1,6 @@
 import requests
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from django.urls import reverse
 from .forms import ProductForm
 from django.conf import settings
@@ -16,18 +17,53 @@ def detalle_producto(request, product_id):
     producto = response.json()
     return render(request, 'productos/detalle_producto.html', {'producto': producto})
 
-
-
 def crear_producto(request):
-    if request.method == 'POST':
-        form = ProductForm(request.POST)
+    if request.method == "POST":
+        form = ProductForm(request.POST, request.FILES)
+        print("Formulario recibido:", form)
         if form.is_valid():
-            new_product = form.cleaned_data
-            response = requests.post(f'{API_URL}products/create/', json=new_product)
-            if response.status_code == 200:
-                return redirect(reverse('lista_productos'))
+            name = form.cleaned_data['name']
+            price = form.cleaned_data['price']
+            description = form.cleaned_data['description']
+            image = form.cleaned_data['image']
+            print("Imagen recibida:", image)
+            image_url = None
+
+            # Verificamos si la imagen se recibe correctamente
+            print("Nombre de la imagen:", image.name)
+            print("Tipo de contenido de la imagen:", image.content_type)
+
+            # Subir la imagen a FastAPI
+            if image:
+                upload_url = f'{API_URL}uploadfile/'
+                files = {'file': (image.name, image.read(), image.content_type)}
+                response = requests.post(upload_url, files=files)
+                if response.status_code == 200:
+                    image_url = response.json().get("file_path")
+                    print("URL de la imagen subida:", image_url)
+                else:
+                    error_message = f"Error al subir la imagen: {response.text}"
+                    return render(request, 'error.html', {'message': error_message})
+
+            # Crear el producto en FastAPI solo si se subió la imagen correctamente
+            if image_url:
+                create_url = f'{API_URL}products/create/'
+                product_data = {
+                    "name": name,
+                    "price": price,
+                    "description": description,
+                    "image_url": image_url
+                }
+                response = requests.post(create_url, json=product_data)
+                if response.status_code == 200:
+                    return redirect('lista_productos')
+                else:
+                    error_message = f"Error al crear el producto: {response.text}"
+                    return render(request, 'error.html', {'message': error_message})
+
     else:
         form = ProductForm()
+
     return render(request, 'productos/crear_producto.html', {'form': form})
 
 def actualizar_producto(request, product_id):

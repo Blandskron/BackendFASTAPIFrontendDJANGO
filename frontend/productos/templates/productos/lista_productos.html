@@ -11,6 +11,7 @@
             <ul class="list-group">
             {% for producto in productos %}
                 <li class="list-group-item" style="background-color: rgb(210, 210, 146);">
+                    {{ producto.image_url }}
                     <h5>{{ producto.name }}</h5>
                     <p>Precio: ${{ producto.price }}</p>
                     <p>{{ producto.description }}</p>
