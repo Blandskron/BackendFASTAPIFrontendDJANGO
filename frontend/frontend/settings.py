@@ -30,6 +30,11 @@ ALLOWED_HOSTS = []
 
 API_URL = 'http://127.0.0.1:8000/'
 
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = [
+    "http://localhost:8000", 
+]
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -124,7 +129,7 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static/',
 ]
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'backend', 'uploads')
+MEDIA_ROOT = [BASE_DIR / 'media/']
 MEDIA_URL = '/media/'
 
 # Default primary key field type
