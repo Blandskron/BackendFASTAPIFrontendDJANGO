@@ -1,3 +1,4 @@
+# models.py
 from sqlalchemy import create_engine, Column, Integer, String, Float, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -20,6 +21,7 @@ class Product(Base):
     name = Column(String, index=True)
     price = Column(Float)
     description = Column(String, nullable=True)
+    image_url = Column(String, nullable=True)  # New column for image URL
     last_updated = Column(DateTime, default=datetime.utcnow)
 
 # Create the database tables
