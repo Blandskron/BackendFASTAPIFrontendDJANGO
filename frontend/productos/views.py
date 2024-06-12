@@ -20,23 +20,16 @@ def detalle_producto(request, product_id):
 def crear_producto(request):
     if request.method == "POST":
         form = ProductForm(request.POST, request.FILES)
-        print("Formulario recibido:", form)
         if form.is_valid():
             name = form.cleaned_data['name']
             price = form.cleaned_data['price']
             description = form.cleaned_data['description']
             image = request.FILES.get('image')
 
-            print("Imagen recibida:", image)
             image_url = None
 
             if image:
                 try:
-                    # Verificamos si la imagen se recibe correctamente
-                    print("Nombre de la imagen:", image.name)
-                    print("Tipo de contenido de la imagen:", image.content_type)
-
-                    # Subir la imagen a FastAPI
                     upload_url = f'{API_URL}uploadfile/'
                     files = {'file': (image.name, image.read(), image.content_type)}
                     response = requests.post(upload_url, files=files)
@@ -50,7 +43,6 @@ def crear_producto(request):
                     print("Error al obtener atributos de la imagen:", e)
                     return render(request, 'error.html', {'message': 'Error al procesar la imagen. Verifique el archivo e intente nuevamente.'})
             
-            # Crear el producto en FastAPI solo si se subió la imagen correctamente
             if image_url:
                 create_url = f'{API_URL}products/create/'
                 product_data = {
