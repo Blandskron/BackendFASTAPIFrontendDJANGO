@@ -5,54 +5,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}My Django App{% endblock %}</title>
-    <!-- Agrega los estilos base de Django -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <script>
         function toggleDarkMode() {
             const body = document.body;
             body.classList.toggle('dark-mode');
-
+    
             const isDarkMode = body.classList.contains('dark-mode');
             localStorage.setItem('dark-mode', isDarkMode);
+    
+            // Cambiar la imagen del botón
+            const modeIcon = document.getElementById("modeIcon");
+            if (isDarkMode) {
+                modeIcon.src = "{% static 'img/sun.png' %}"; // Cambiar a la imagen del sol
+            } else {
+                modeIcon.src = "{% static 'img/moon.png' %}"; // Cambiar a la imagen de la luna
+            }
         }
-
-        
+    
         window.onload = function () {
             const isDarkMode = JSON.parse(localStorage.getItem('dark-mode'));
             const body = document.body;
-
+    
             if (isDarkMode) {
                 body.classList.add('dark-mode');
+                // Cambiar la imagen del botón al modo oscuro
+                const modeIcon = document.getElementById("modeIcon");
+                modeIcon.src = "{% static 'img/sun.png' %}";
             } else {
                 body.classList.remove('dark-mode');
+                // Cambiar la imagen del botón al modo claro
+                const modeIcon = document.getElementById("modeIcon");
+                modeIcon.src = "{% static 'img/moon.png' %}";
             }
         };
-    </script>
+    </script>    
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light">
-        <a class="navbar-brand" href="#">My Django App</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <!-- Aquí puedes agregar enlaces de navegación -->
-            </ul>
-            <!-- Botón para alternar entre el modo claro/oscuro -->
-            <button class="btn btn-dark" onclick="toggleDarkMode()">Toggle Dark Mode</button>
-        </div>
-    </nav>
+    <header>
+        {% include 'header.html' %}
+    </header>
 
     <div class="container">
         {% block content %}
         {% endblock %}
     </div>
 
-
+    
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
